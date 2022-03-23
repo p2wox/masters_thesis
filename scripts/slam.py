@@ -10,24 +10,30 @@ import pcl.pcl_visualization
 
 VERBOSE = False
 
-class localizer:
-
-  def __init__():
-  
    
 class mapper:
   
-  def __init__():
-    self.M = pcl.PointCloud()
-    self.T = 0
+  #Initialize the map to an empty point cloud
+  self.M = pcl.PointCloud()
 
+  #Initialize location of the robot to zero 
+  self.T = [[1,0,0,0],
+            [0,1,0,0],
+            [0,0,1,0],
+            [0,0,0,1]]
+
+  #Return the current map
   def get_map():
     return self.M
 
-  def update_map(data):
-    if VERBOSE:
-      print('received poincloud data from the depth camera')
+  #transform pointcloud data using self.T
+  def transform_data(data):
+    
 
+  #Update map using data received from depth sensor and current location of the robot
+  def update_map(data):
+
+    #Convert data from PointCloud2 to pcl
     points_list = []
   
     for data in pc2.read_points(data, skip_nans=True):
@@ -36,18 +42,23 @@ class mapper:
     pcl_data = pcl.PointCloud()
     pcl_data.from_list(points_list)
   
-    #if Map does not
+    #if Map does not exist yet, create map from the current data received fromt the depth sensor
     if self.M.empty():
       self.M = pcl_data
     else:
+      #transform point cloud to correct location using current location of the robot
+      pcl_data_transformed = self.transform_data(pcl_data)
+
+      #Match point cloud to the map
       
-      
+  #Return the current location of the robot    
   def get_location():
     return self.T
 
   #Update the current location self.T using nav_msgs/Odometry.msg message
   def update_location(data):
- 
+    self.T = data  
+   
 #listener listens to 'camera/depth/points' and runs callback function when data is received
 def listener():
 
